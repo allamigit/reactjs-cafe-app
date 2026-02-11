@@ -27,7 +27,17 @@ a.email-icon:hover {
   transform: scale(1.15);
 }
 
-.home-container {
+a.github-icon {
+  color: white;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+a.github-icon:hover {
+  color: #c9d1d9;
+  transform: scale(1.15);
+}
+
+s.home-container {
   display: flex;
   justify-content: center;   /* centers horizontally */
   align-items: center;       /* centers vertically (if given height) */
@@ -44,6 +54,7 @@ a.email-icon:hover {
   color: gray;
   font-size: 1.2em;
 }
+
 .App h4 {
   font-size: 1.6em;
   margin-top: 15px;
@@ -67,6 +78,23 @@ a.email-icon:hover {
 
 .App h5 {
   font-size: 1.1em;
+}
+
+.home-page {
+  background-image: url('./assets/home-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .home-page {
+    background-size: contain;
+    background-color: rgb(246, 245, 245);
+  }
 }
 
 .btn {

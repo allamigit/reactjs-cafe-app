@@ -6,7 +6,7 @@ import MenuPage from './component/MenuPage';
 import Order from './component/Order';
 import { Routes, Route, Link } from 'react-router-dom';
 import imgPath from './assets/logo.png';
-import { FaLinkedin, FaEnvelope  } from "react-icons/fa";
+import { FaLinkedin, FaEnvelope, FaGithub  } from "react-icons/fa";
 
 export default function App() {
   return (
@@ -56,6 +56,15 @@ export default function App() {
 
           {/* Right side icon */}
           <div className="d-flex align-items-center">
+            <a
+              href="https://github.com/allamigit/reactjs-cafe-app/tree/master/src"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="github-icon ms-3"
+            >
+              <FaGithub size={28} />
+            </a>
+
             <a
               href="https://www.linkedin.com/in/mohammad-al-lami-6752611a3/"
               target="_blank"
