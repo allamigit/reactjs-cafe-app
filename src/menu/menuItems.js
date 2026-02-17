@@ -42,8 +42,8 @@ export const hotDrinks = () => {
 
 export const coldDrinks = () => {
     return [
-        new MenuItem('CD-1','Iced Coffee', 8, 2.99, true, true, true),
-        new MenuItem('CD-2','Iced Macchiato', 120, 3.99, true, true, false),
+        new MenuItem('CD-1','Iced Coffee', 8, 2.99, true, true, false),
+        new MenuItem('CD-2','Iced Macchiato', 120, 3.99, true, true, true),
         new MenuItem('CD-3','Iced Vanilla Latte', 130, 3.99, true, true, true),
         new MenuItem('CD-4','Iced Chai Latte', 120, 2.99, true, true, true),
         new MenuItem('CD-5','Iced Matcha Latte', 140, 3.99, true, true, true),

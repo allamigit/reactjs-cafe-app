@@ -8,7 +8,24 @@ import { Routes, Route, Link } from 'react-router-dom';
 import imgPath from './assets/logo.png';
 import { FaLinkedin, FaEnvelope, FaGithub  } from "react-icons/fa";
 
+const GITHUB_PIN = "753951";
+
 export default function App() {
+  const handleGithubClick = (e) => {
+    e.preventDefault();
+    const pin = window.prompt("Enter 6-digits PIN to access GitHub:");
+
+    if (pin === GITHUB_PIN) {
+      window.open(
+        "https://github.com/allamigit/reactjs-cafe-app/tree/master/src",
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } else if (pin !== null) {
+      alert("❌ Incorrect PIN");
+    }
+  };
+
   return (
     <div className="App d-flex flex-column min-vh-100" style={{ fontSize: '1.1em' }}>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -54,12 +71,11 @@ export default function App() {
             </ul>
           </div>
 
-          {/* Right side icon */}
+          {/* Right side icons */}
           <div className="d-flex align-items-center">
             <a
-              href="https://github.com/allamigit/reactjs-cafe-app/tree/master/src"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="GitHub"
+              onClick={handleGithubClick}
               className="github-icon ms-3"
             >
               <FaGithub size={28} />

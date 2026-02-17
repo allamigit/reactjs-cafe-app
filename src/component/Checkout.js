@@ -61,7 +61,7 @@ export default function Checkout(props) {
             .from(element)
             .save()
             .then(() => {
-                // Restore buttons after download completes
+                // Restore buttons after PDF download completes
                 buttons.forEach(btn => (btn.style.display = 'flex'));
             });
     };

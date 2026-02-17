@@ -2,7 +2,9 @@
 import '../App.css'; 
 import { useState, useRef, useEffect } from 'react';
 
-export default function Payment({ total, onSubmitPayment, onCancelOrder, onBackToCheckout, orderNumber, paymentForm, setPaymentForm }) {
+export default function Payment(
+  { total, onSubmitPayment, onCancelOrder, onBackToCheckout, orderNumber, paymentForm, setPaymentForm }) {
+    
   const { cardNumber = '', expiryDate = '', securityCode = '' } = paymentForm || {};
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);

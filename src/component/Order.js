@@ -74,6 +74,7 @@ export default function Order() {
         <a href="#coldDrinks">Cold Drinks</a>
         <a href="#top">Top</a>
         <p></p>
+
         <div className="Row Indent" hidden={orderItems.length === 0 || showCheckout}>
           <button className="btn btn-outline-primary" onClick={handleCancelOrder}>Cancel Order</button>
           <button className="btn btn-primary" onClick={() => setShowCheckout(true)}>Checkout</button>

@@ -31,7 +31,7 @@ export default function About() {
 
       <p style={{ marginTop: "20px", color: "#007bff" }}>
         This project does not represent a real café business.  
-        All names, items, and transactions are for educational use only.
+        All names, items, and transactions are for educational and demonstration use only.
       </p>
     </div>
   );

@@ -85,6 +85,8 @@ export default function Menu(props) {
         props.onAddToOrder(newItem);
     };
 
+    window.scrollTo(0, 0)
+    
     return (
         <div>
             <h4>{props.menu}</h4>
@@ -180,11 +182,11 @@ export default function Menu(props) {
                                     alt="menu-item" 
                                 />
                                 <img 
+                                    className={`checkmark ${addedItem[item.itemId] ? 'visible' : ''}`} 
                                     src={imgPath} 
                                     alt="check-mark" 
                                     width="60" 
                                     height="60" 
-                                    className={`checkmark ${addedItem[item.itemId] ? 'visible' : ''}`} 
                                 />
                             </div>
                         </div>
