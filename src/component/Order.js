@@ -82,13 +82,13 @@ export default function Order() {
       </div>
       
       <div hidden={showCheckout}>
-        <p id="pastries"></p>
+        <p id="pastries" style={{color: "white"}}>.</p>
         <Menu menu="Pastries" action="order" data={pastries} onAddToOrder={handleAddToOrder} />
-        <p id="cakes"></p>
+        <p id="cakes" style={{color: "white"}}>.</p>
         <Menu menu="Cakes" action="order" data={cakes} onAddToOrder={handleAddToOrder} />
-        <p id="hotDrinks"></p>
+        <p id="hotDrinks" style={{color: "white"}}>.</p>
         <Menu menu="Hot Drinks" action="order" data={hotDrinks} onAddToOrder={handleAddToOrder} />
-        <p id="coldDrinks"></p>
+        <p id="coldDrinks" style={{color: "white"}}>.</p>
         <Menu menu="Cold Drinks" action="order" data={coldDrinks} onAddToOrder={handleAddToOrder} />
       </div>
 

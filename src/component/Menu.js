@@ -1,7 +1,7 @@
 
 import '../App.css';
 import imgPath from '../assets/check-mark.png';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Menu(props) {
     const [qty, setQty] = useState({});
@@ -85,7 +85,9 @@ export default function Menu(props) {
         props.onAddToOrder(newItem);
     };
 
-    window.scrollTo(0, 0)
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     
     return (
         <div>
