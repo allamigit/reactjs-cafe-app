@@ -1,25 +1,27 @@
 
 import '../App.css';
 import { useState, useEffect } from 'react';
-import Menu from "./Menu";
-import Checkout from './Checkout';
-import Payment from './Payment';
-import { pastries, cakes, hotDrinks, coldDrinks } from '../menu/menuItems';
+import Menu from "../menu/Menu";
+import CheckoutPage from './CheckoutPage';
+import PaymentPage from './PaymentPage';
+import { pastries, cakes, hotDrinks, coldDrinks } from '../menu/MenuData';
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function Order() {
+export default function OrderPage() {
   const [orderItems, setOrderItems] = useState([]);
   const [showCheckout, setShowCheckout] = useState(false);
   const [showPayment, setShowPayment] = useState(false);
   const [paymentProcessed, setPaymentProcessed] = useState(false);
   const [finalTotal, setFinalTotal] = useState(0);
   const [orderNumber, setOrderNumber] = useState(0);
+  const [resetKey, setResetKey] = useState(0);
   const [orderTip, setOrderTip] = useState(0);
   const [paymentForm, setPaymentForm] = useState({
     cardNumber: '',
     expiryDate: '',
     securityCode: ''
   });
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   const handleAddToOrder = (newItem) => {
     setOrderItems(prev => {
@@ -36,13 +38,21 @@ export default function Order() {
   };
 
   const handleCancelOrder = () => {
-    setOrderItems(() => []);
+    // Clear parent state
+    setOrderItems([]);
     setShowCheckout(false);
     setShowPayment(false);
     setPaymentProcessed(false);
+    setFinalTotal(0);
+    setOrderNumber(0);
     setOrderTip(0);
     setPaymentForm({ cardNumber: '', expiryDate: '', securityCode: '' });
-    window.location.reload();
+
+    // Bump resetKey to force Menu components to remount and clear their internal state
+    setResetKey(prev => prev + 1);
+
+    // Ensure view is reset to top
+    window.scrollTo(0, 0);
   };
 
   const handleFinalTotal = (total) => {
@@ -61,6 +71,15 @@ export default function Order() {
   const handlePaymentSubmit = (paymentData) => {
     setPaymentProcessed(true);
   };  
+
+  const handleViewOrder = () => {
+    setShowOrderModal(true);
+    window.scrollTo(0, 0);
+  };
+
+  const handleCloseOrderModal = () => {
+    setShowOrderModal(false);
+  };
   
   useEffect(() => console.log('Current Order:', orderItems), [orderItems]);
 
@@ -72,7 +91,7 @@ export default function Order() {
         <a href="#cakes">Cakes</a>
         <a href="#hotDrinks">Hot Drinks</a>
         <a href="#coldDrinks">Cold Drinks</a>
-        <a href="#top">Top</a>
+        <a href="#top" onClick={(e) => { e.preventDefault(); window.scrollTo(0, 0); }}>Top</a>
         <p></p>
 
         <div className="Row Indent" hidden={orderItems.length === 0 || showCheckout}>
@@ -83,13 +102,13 @@ export default function Order() {
       
       <div hidden={showCheckout}>
         <p id="pastries" style={{color: "white"}}>.</p>
-        <Menu menu="Pastries" action="order" data={pastries} onAddToOrder={handleAddToOrder} />
+        <Menu key={`pastries-${resetKey}`} menu="Pastries" action="order" data={pastries} onAddToOrder={handleAddToOrder} />
         <p id="cakes" style={{color: "white"}}>.</p>
-        <Menu menu="Cakes" action="order" data={cakes} onAddToOrder={handleAddToOrder} />
+        <Menu key={`cakes-${resetKey}`} menu="Cakes" action="order" data={cakes} onAddToOrder={handleAddToOrder} />
         <p id="hotDrinks" style={{color: "white"}}>.</p>
-        <Menu menu="Hot Drinks" action="order" data={hotDrinks} onAddToOrder={handleAddToOrder} />
+        <Menu key={`hotDrinks-${resetKey}`} menu="Hot Drinks" action="order" data={hotDrinks} onAddToOrder={handleAddToOrder} />
         <p id="coldDrinks" style={{color: "white"}}>.</p>
-        <Menu menu="Cold Drinks" action="order" data={coldDrinks} onAddToOrder={handleAddToOrder} />
+        <Menu key={`coldDrinks-${resetKey}`} menu="Cold Drinks" action="order" data={coldDrinks} onAddToOrder={handleAddToOrder} />
       </div>
 
       <AnimatePresence mode="wait">
@@ -101,7 +120,8 @@ export default function Order() {
             exit={{ x: 100, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <Checkout 
+            <CheckoutPage 
+              type="order"
               data={orderItems} 
               onTotalChange={handleFinalTotal} 
               onOrderNumber={handleOrderNumber} 
@@ -126,7 +146,7 @@ export default function Order() {
             exit={{ x: -100, opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <Payment
+            <PaymentPage
               total={finalTotal}
               onSubmitPayment={handlePaymentSubmit}
               onCancelOrder={handleCancelOrder}
@@ -140,8 +160,45 @@ export default function Order() {
       </AnimatePresence>
 
       <div className="Row Indent" hidden={!showPayment || !paymentProcessed}>
-        <button className="btn btn-primary" onClick={handleCancelOrder}>Place New Order</button>
+        <button className="btn btn-outline-primary" onClick={handleCancelOrder}>Place New Order</button>
+        <button className="btn btn-success" onClick={handleViewOrder}>View Order</button>
       </div>
+
+      <AnimatePresence mode="wait">
+        {showOrderModal && (
+          <motion.div
+            className="modal-backdrop"
+            key="orderModal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={handleCloseOrderModal}
+          >
+            <motion.div
+              className="modal-content-container"
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close" onClick={handleCloseOrderModal} aria-label="Close order modal">
+                ×
+              </button>
+              <CheckoutPage 
+                type="view"
+                data={orderItems} 
+                onTotalChange={handleFinalTotal} 
+                onOrderNumber={handleOrderNumber} 
+                orderTip={orderTip}
+                setOrderTip={setOrderTip}
+                parentOrderNumber={orderNumber}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

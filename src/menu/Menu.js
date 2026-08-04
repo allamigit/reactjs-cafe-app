@@ -85,15 +85,13 @@ export default function Menu(props) {
         props.onAddToOrder(newItem);
     };
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+    useEffect(() => { window.scrollTo(0, 0) }, []);
     
     return (
         <div>
             <h4>{props.menu}</h4>
             <div className="Row">
-                {props.data().map(item => {
+                {(typeof props.data === 'function' ? props.data() : props.data).map(item => {
                     const itemQty = qty[item.itemId] || 0;
                     const opts = options[item.itemId] || {
                         ice: item.addIn1 ? true : false,

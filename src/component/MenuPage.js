@@ -1,7 +1,7 @@
 
 import '../App.css';
-import Menu from "./Menu";
-import { pastries, cakes, hotDrinks, coldDrinks } from '../menu/menuItems';
+import Menu from "../menu/Menu";
+import { pastries, cakes, hotDrinks, coldDrinks } from '../menu/MenuData';
 import { Routes, Route, NavLink } from 'react-router-dom';
 
 export default function MenuPage() {
@@ -29,22 +29,22 @@ export default function MenuPage() {
                     <div className="collapse navbar-collapse" id="navbarMenu">
                         <ul className="navbar-nav d-flex gap-5 mx-auto">
                             <li className="nav-item">
-                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="pastries" end>
+                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="/menu/pastries">
                                     Pastries                            
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="cakes">
+                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="/menu/cakes">
                                     Cakes
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="hot-drinks">
+                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="/menu/hot-drinks">
                                     Hot Drinks
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="cold-drinks">
+                                <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active fw-bold text-primary' : '')} to="/menu/cold-drinks">
                                     Cold Drinks
                                 </NavLink>
                             </li>

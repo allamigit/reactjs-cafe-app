@@ -2,7 +2,7 @@
 import '../App.css'; 
 import { useState, useRef, useEffect } from 'react';
 
-export default function Payment(
+export default function PaymentPage(
   { total, onSubmitPayment, onCancelOrder, onBackToCheckout, orderNumber, paymentForm, setPaymentForm }) {
     
   const { cardNumber = '', expiryDate = '', securityCode = '' } = paymentForm || {};
@@ -25,10 +25,22 @@ export default function Payment(
       newErrors.cardNumber = 'Card number must be 16 digits';
     }
 
-    // Expiry date: must match MM/YY
+    // Expiry date: must match MM/YY and not be expired
     const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
     if (!expiryRegex.test(expiryDate)) {
       newErrors.expiryDate = 'Expiry must be in MM/YY format';
+    } else {
+      const [monthText, yearText] = expiryDate.split('/');
+      const month = Number(monthText);
+      const year = Number(yearText);
+      const expiryYear = 2000 + year;
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear = now.getFullYear();
+
+      if (expiryYear < currentYear || (expiryYear === currentYear && month <= currentMonth)) {
+        newErrors.expiryDate = 'Card is expired';
+      }
     }
 
     // Security code: 3 digits
@@ -151,8 +163,8 @@ export default function Payment(
   
   return (
     <div className="App">
-      <h3>Payment</h3>
-      <p style={{ textAlign: "center", marginTop: "20px", color: 'rgb(252, 142, 102)', fontWeight: 'bold' }} hidden={submitted}>
+      <h3 style={{ color: 'orange' }}>Payment</h3>
+      <p style={{ textAlign: "center", marginTop: "20px", color: 'green', fontWeight: 'bold' }} hidden={submitted}>
         Total Amount Due: <u>${total.toFixed(2)}</u>
       </p>
 
@@ -248,13 +260,6 @@ export default function Payment(
           
           {/* Buttons */}
           <div className="Row" style={{ marginTop: '15px', justifyContent: 'center', gap: '8px' }}>
-            <button className="btn btn-outline-primary" type="button" onClick={onCancelOrder} disabled={processing}>
-                Cancel Order
-            </button>
-            <button className="btn btn-outline-primary" type="button" onClick={handleBack} disabled={processing}>
-                Back to Checkout
-            </button>
-
             {!failed ? (
               <button className="btn btn-success" type="submit" disabled={processing}>
                 {processing ? 'Processing…' : 'Submit Payment'}
@@ -265,11 +270,18 @@ export default function Payment(
               </button>
             )}
           </div>
+
+          <div className="Row" style={{ marginTop: '15px', justifyContent: 'center', gap: '8px' }}>
+            <button className="btn btn-outline-primary" type="button" onClick={onCancelOrder} disabled={processing}>
+                Cancel Order
+            </button>
+            <button className="btn btn-outline-primary" type="button" onClick={handleBack} disabled={processing}>
+                Back to Checkout
+            </button>
+          </div>
         </form>
       ) : (
         <div style={{ justifyItems: 'center', marginTop: "30px" }}>
-          {/*<h4 style={{ fontSize: "1.4em", marginLeft: "0px" }}>✅ Payment Submitted Successfully</h4>
-          <h5 style={{ marginTop: "20px" }}>Your Order# {orderNumber}, please check the Pickup counter</h5>*/}
           <div className="alert alert-success mt-3" role="alert" style={{ textAlign: 'center', width: '450px' }}>
             ✅ Payment Submitted Successfully
           </div>

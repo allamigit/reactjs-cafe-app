@@ -1,7 +1,7 @@
 
 import '../App.css';
 
-export default function About() {
+export default function AboutPage() {
   return (
     <div 
       className="App d-flex flex-column align-items-center text-center" 

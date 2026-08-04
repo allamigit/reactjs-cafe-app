@@ -3,7 +3,7 @@ import '../App.css';
 import { useState, useEffect, useMemo } from 'react';
 import html2pdf from "html2pdf.js";
 
-export default function Checkout(props) {
+export default function CheckoutPage(props) {
     const [localOrderNumber] = useState(() => props.parentOrderNumber || Math.floor(Math.random() * 100));
     const orderNumber = props.parentOrderNumber || localOrderNumber;    
     const [orderDate] = useState(new Date());
@@ -44,6 +44,16 @@ export default function Checkout(props) {
     const handleDownloadPDF = () => {
         const element = document.getElementById('print-area');
         const buttons = element.querySelectorAll('.invoice-actions');
+        const checkoutContainer = element.querySelector('.checkout-container');
+        const originalStyles = {
+            maxHeight: checkoutContainer?.style.maxHeight || '',
+            overflow: checkoutContainer?.style.overflow || ''
+        };
+
+        if (checkoutContainer) {
+            checkoutContainer.style.maxHeight = 'none';
+            checkoutContainer.style.overflow = 'visible';
+        }
 
         // Hide buttons before generating PDF
         buttons.forEach(btn => (btn.style.display = 'none'));
@@ -63,7 +73,51 @@ export default function Checkout(props) {
             .then(() => {
                 // Restore buttons after PDF download completes
                 buttons.forEach(btn => (btn.style.display = 'flex'));
+                if (checkoutContainer) {
+                    checkoutContainer.style.maxHeight = originalStyles.maxHeight;
+                    checkoutContainer.style.overflow = originalStyles.overflow;
+                }
             });
+    };
+
+    const handlePrint = () => {
+        const element = document.getElementById('print-area');
+        if (!element) return;
+
+        const originalDisplay = element.style.display;
+        element.style.display = 'none';
+
+        const clone = element.cloneNode(true);
+        clone.id = 'print-area-print';
+        clone.style.position = 'relative';
+        clone.style.visibility = 'visible';
+        clone.style.display = 'block';
+
+        const checkoutContainer = clone.querySelector('.checkout-container');
+        if (checkoutContainer) {
+            checkoutContainer.style.maxHeight = 'none';
+            checkoutContainer.style.overflow = 'visible';
+        }
+
+        const printWrapper = document.createElement('div');
+        printWrapper.id = 'print-area-print-wrapper';
+        printWrapper.style.position = 'fixed';
+        printWrapper.style.top = '0';
+        printWrapper.style.left = '0';
+        printWrapper.style.width = '100%';
+        printWrapper.style.zIndex = '9999';
+        printWrapper.style.background = '#fff';
+        printWrapper.appendChild(clone);
+        document.body.appendChild(printWrapper);
+
+        const cleanup = () => {
+            document.body.removeChild(printWrapper);
+            element.style.display = originalDisplay;
+            window.onafterprint = null;
+        };
+
+        window.onafterprint = cleanup;
+        window.print();
     };
 
     useEffect(() => {
@@ -72,20 +126,19 @@ export default function Checkout(props) {
 
     return (
         <div className="App">
-            <h3>Checkout</h3>
+            <h3 style={{ color: 'orange' }}>{props.type === 'order' ? 'Checkout' : 'View Order'}</h3>
 
             <div id="print-area" className="invoice-box">
                 <div className="Row Indent invoice-header">
-                    <h5>Order# {order.orderNumber}</h5>
-                    <h5>
-                        Date:{' '}
-                        {order.orderDate.toLocaleString('en-US', {
-                            dateStyle: 'medium',
-                            timeStyle: 'short'
-                        })}
-                    </h5>
+                    <div style={{ textAlign: 'left' }}>
+                        <h5>Order# {order.orderNumber}</h5>
+                        <h5>
+                            Date:{' '}
+                            {order.orderDate.toLocaleString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '')}
+                        </h5>
+                    </div>
                     <div className="invoice-actions">
-                            <button className="btn btn-outline-primary" style={{ width: "80px"}} onClick={() => window.print()}>
+                            <button className="btn btn-outline-primary" style={{ width: "80px"}} onClick={handlePrint}>
                             Print
                         </button>
                         <button className="btn btn-outline-primary" style={{ width: "80px"}} onClick={handleDownloadPDF}>

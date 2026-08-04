@@ -1,9 +1,9 @@
 
 import './App.css';
 import HomePage from './component/HomePage';
-import About from './component/About';
+import AboutPage from './component/AboutPage';
 import MenuPage from './component/MenuPage';
-import Order from './component/Order';
+import OrderPage from './component/OrderPage';
 import { Routes, Route, Link } from 'react-router-dom';
 import imgPath from './assets/logo.png';
 import { FaLinkedin, FaEnvelope, FaGithub  } from "react-icons/fa";
@@ -103,9 +103,9 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/menu/*" element={<MenuPage />} />
-        <Route path="/order" element={<Order />} />
+        <Route path="/order" element={<OrderPage />} />
       </Routes>
 
       {/* Footer */}
