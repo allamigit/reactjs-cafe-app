@@ -27,8 +27,8 @@ export default function App() {
   };
 
   return (
-    <div className="App d-flex flex-column min-vh-100" style={{ fontSize: '1.1em' }}>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="App d-flex flex-column min-vh-100" style={{ fontSize: '1.1em' }}>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           {/* Brand */}
           <Link className="navbar-brand" to="/">

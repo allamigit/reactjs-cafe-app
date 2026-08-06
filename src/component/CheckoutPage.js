@@ -2,19 +2,25 @@
 import '../App.css';
 import { useState, useEffect, useMemo } from 'react';
 import html2pdf from "html2pdf.js";
+import { useOrder } from '../context/OrderContext';
 
 export default function CheckoutPage(props) {
-    const [localOrderNumber] = useState(() => props.parentOrderNumber || Math.floor(Math.random() * 100));
-    const orderNumber = props.parentOrderNumber || localOrderNumber;    
+    const { orderItems, orderTip, setOrderTip, orderNumber, setOrderNumber } = useOrder();
+    const [localOrderNumber] = useState(() => props.parentOrderNumber || orderNumber || Math.floor(Math.random() * 100));
+    const displayOrderNumber = props.parentOrderNumber || orderNumber || localOrderNumber;
     const [orderDate] = useState(new Date());
-    const orderTip = props.orderTip ?? 0;
-    const setOrderTip = props.setOrderTip ?? (() => {});
+
+    useEffect(() => {
+        if (!props.parentOrderNumber && !orderNumber) {
+            setOrderNumber(localOrderNumber);
+        }
+    }, [props.parentOrderNumber, orderNumber, localOrderNumber, setOrderNumber]);
 
     const order = useMemo(() => ({
-        orderNumber,
+        orderNumber: displayOrderNumber,
         orderDate,
-        orderItems: props.data || []
-    }), [orderNumber, orderDate, props.data]);
+        orderItems
+    }), [displayOrderNumber, orderDate, orderItems]);
 
     const orderTotal = useMemo(() => {
         return order.orderItems.reduce((sum, item) => sum + (item.total || 0), 0);
@@ -23,23 +29,6 @@ export default function CheckoutPage(props) {
     const finalTotal = useMemo(() => {
         return orderTotal + Number(orderTip);
     }, [orderTotal, orderTip]);
-
-    // Notify Order.js with the updated final total
-    useEffect(() => {
-        if (props.onTotalChange) {
-            props.onTotalChange(finalTotal);
-        }
-    }, [props, finalTotal]);
-
-    // Notify Order.js with the order number, but only if parent hasn't provided one
-    useEffect(() => {
-        if (!props.parentOrderNumber && props.onOrderNumber) {
-            props.onOrderNumber(orderNumber);
-        } else if (props.parentOrderNumber && props.onOrderNumber) {
-            // Ensure parent knows provided orderNumber
-            props.onOrderNumber(props.parentOrderNumber);
-        }
-    }, [props, orderNumber]);
     
     const handleDownloadPDF = () => {
         const element = document.getElementById('print-area');
@@ -126,7 +115,7 @@ export default function CheckoutPage(props) {
 
     return (
         <div className="App">
-            <h3 style={{ color: 'orange' }}>{props.type === 'order' ? 'Checkout' : 'View Order'}</h3>
+            <h3 style={{ color: 'orange' }}>{props.action === 'order' ? 'Checkout' : 'View Order'}</h3>
 
             <div id="print-area" className="invoice-box">
                 <div className="Row Indent invoice-header">

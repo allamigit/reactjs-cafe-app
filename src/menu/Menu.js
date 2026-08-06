@@ -1,9 +1,11 @@
 
 import '../App.css';
 import imgPath from '../assets/check-mark.png';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useOrder } from '../context/OrderContext';
 
 export default function Menu(props) {
+    const { addToOrder } = useOrder();
     const [qty, setQty] = useState({});
     const [options, setOptions] = useState({});
     const [addedItem, setAddedItem] = useState({});
@@ -82,11 +84,13 @@ export default function Menu(props) {
             [item.itemId]: newItem.qty > 0 ? true : false
         }));
 
-        props.onAddToOrder(newItem);
+        if (props.onAddToOrder) {
+          props.onAddToOrder(newItem);
+        } else {
+          addToOrder(newItem);
+        }
     };
 
-    useEffect(() => { window.scrollTo(0, 0) }, []);
-    
     return (
         <div>
             <h4>{props.menu}</h4>
