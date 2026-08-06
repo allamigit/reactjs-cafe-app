@@ -18,7 +18,7 @@ export default function AboutPage() {
       <p style={{ maxWidth: "700px", fontSize: "1.1em", lineHeight: "1.6", color: "#555" }}>
         <strong>reactjsCafé</strong> is a fictional café application created 
         solely for <strong>learning and demonstration</strong> purposes.  
-        It showcases various <strong>React.js</strong> features, including:
+        It showcases various <strong>ReactJS</strong> features, including:
       </p>
 
       <ul style={{ textAlign: "left", maxWidth: "500px", color: "#444", fontSize: "1em", marginTop: "10px" }}>
@@ -27,6 +27,7 @@ export default function AboutPage() {
         <li> Dynamic checkout and payment simulation</li>
         <li> Framer Motion animations and smooth transitions</li>
         <li> React Router navigation</li>
+        <li> React Context for current order to be accessed from other components</li>
       </ul>
 
       <p style={{ marginTop: "20px", color: "#007bff" }}>
