@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useMemo, useState } from 'react';
 
 /**
@@ -22,7 +23,7 @@ Uses context order data and tip state
 Keeps print/PDF export behavior intact
  */
 
-const OrderContext = createContext(null);
+const OrderContext = createContext();
 
 export function OrderProvider({ children }) {
   const [orderItems, setOrderItems] = useState([]);

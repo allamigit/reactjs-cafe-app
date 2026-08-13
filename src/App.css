@@ -63,10 +63,7 @@ s.home-container {
 }
 
 .App h4:hover {
-  /*font-size: 2em;*/
   color: rgb(97, 160, 9);
-  /*background-color: rgb(92, 136, 92);
-  width: fit-content;*/
 }
 
 .App h3 {
@@ -89,7 +86,7 @@ s.home-container {
   width: 100%;
 }
 
-/* Mobile optimization */
+/* Mobile optimization for background image/color */
 @media (max-width: 768px) {
   .home-page {
     background-size: contain;
@@ -112,7 +109,6 @@ s.home-container {
 
 .Row.Indent {
   margin-top: 20px;
-  /*margin-right: 60px;*/
   justify-content: center;
 }
 
